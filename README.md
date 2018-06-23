@@ -12,4 +12,50 @@
 /sys/class/pwm/pwmchip1 P9.22 0
 /sys/class/pwm/pwmchip6 P8.13 1
 /sys/class/pwm/pwmchip6 P8.19 0
+
 ```
+
+
+The path for a PX.Y pin is /sys/class/pwm/pwmchipV/pwmW/<duty_cycle|export|polarity|period|enable>
+
+where
+    W is last column digit for ginve PX.Y
+
+A crude C implementation would be
+
+``` code javascript  
+
+std::string get_pwm_path(const char* pin /*"P8.13"*/)
+{
+    std::string fname;
+    std::string temp;
+    char        pwmline[128];
+    FILE*       pf = ::fopen("/tmp/pwmsetup", "rb");
+    while(!::feof(pf))
+    {
+            ::fgets(pwmline, sizeof(pwmline)-1, pf);
+            char* eol = ::strchr(pwmline,'\n');
+            if(eol)  *eol=0;
+            if(feof(pf))  break;
+            if(::strstr(pwmline,   pin))
+            {
+                temp = ::strtok(pwmline," ");
+                temp += "/";
+                fname = temp;
+                temp = ::strtok(0, " ");
+                fname += "pwm";
+                temp = ::strtok(0," ");
+                fname += fname;
+                fname += "/";
+                break;
+            }
+        }
+    }
+    return fname;
+}
+
+```
+
+
+
+
