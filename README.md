@@ -1,4 +1,9 @@
-# bbb-sysscan
+# Obsolete for kernel 4.14.108-ti-r108.
+## Check new pin mapping at the forum @ https://www.redypis.org
+
+
+## bbb-sysscan
+
 ## Beagle Bone sys scanner to resolve PWM and GPIO pins paths and files
 
     - Scans sys folder and geerate /tmp/gpiosetup file with following content.
